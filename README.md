@@ -1,4 +1,4 @@
-# Storyblok iOS App
+# Storyblok Ultimate Tutorial - iOS App
 
 An iOS application built using **SwiftUI**, following the **MVVM design pattern**. The app fetches and dynamically renders content from a **Storyblok CMS**, showcasing a blog space with multiple blocks and screens.
 
