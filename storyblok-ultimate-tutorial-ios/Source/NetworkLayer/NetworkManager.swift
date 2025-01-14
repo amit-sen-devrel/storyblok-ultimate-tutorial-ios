@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 /// A class that manages network requests.
-final class NetworkManager: NetworkService {
+final class NetworkManager {
     
     // MARK: - Properties
     private let session: URLSession
@@ -22,17 +22,29 @@ final class NetworkManager: NetworkService {
     // MARK: - Methods
     
     /**
-     Fetches data from the given URL string.
+     Fetches data from the given URL path.
      
-     - Parameter urlString: The URL string to fetch data from.
+     - Parameter path: The URL path to fetch data from.
+     - Parameter method: The HTTP method to use for the request.
+     - Parameter parameters: The parameters to include in the request.
      - Returns: A publisher with the fetched data or a network error.
      */
-    func fetchData(from urlString: String) -> AnyPublisher<Data, NetworkError> {
-        guard let url = URL(string: urlString) else {
+    func fetchData(from path: String, method: HTTPMethod = .GET, parameters: [String: String] = [:]) -> AnyPublisher<Data, NetworkError> {
+        guard var url = URL(string: APIConstants.baseURL + path) else {
             return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
         }
         
-        return session.dataTaskPublisher(for: url)
+        if !parameters.isEmpty {
+            guard let updatedURL = url.appendingQueryParameters(parameters) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+            url = updatedURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        
+        return session.dataTaskPublisher(for: request)
             .tryMap { output in
                 guard let response = output.response as? HTTPURLResponse else {
                     throw NetworkError.invalidResponse
@@ -50,14 +62,16 @@ final class NetworkManager: NetworkService {
     }
     
     /**
-     Fetches and decodes data from the given URL string.
+     Fetches data from the given URL path and decodes it into the specified type.
      
-     - Parameter urlString: The URL string to fetch data from.
-     - Parameter type: The type of the decoded data.
-     - Returns: A publisher with the decoded data or a network error.
+     - Parameter path: The URL path to fetch data from.
+     - Parameter method: The HTTP method to use for the request.
+     - Parameter parameters: The parameters to include in the request.
+     - Parameter type: The type to decode the fetched data into.
+     - Returns: A publisher with the fetched and decoded data or a network error.
      */
-    func fetchDecodedData<T: Codable>(from urlString: String, type: T.Type) -> AnyPublisher<T, NetworkError> {
-        return fetchData(from: urlString)
+    func fetchData<T: Codable>(from path: String, method: HTTPMethod = .GET, parameters: [String: String] = [:], type: T.Type) -> AnyPublisher<T, NetworkError> {
+        return fetchData(from: path, method: method, parameters: parameters)
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
                 if let decodingError = error as? DecodingError {
