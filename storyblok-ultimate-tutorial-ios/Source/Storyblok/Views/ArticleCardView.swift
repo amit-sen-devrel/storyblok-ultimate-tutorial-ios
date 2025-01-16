@@ -8,10 +8,11 @@
 
 import SwiftUI
 
-struct ArticleCardView: ViewComponent {
+struct ArticleCardView: View {
     let article: ArticleCard
+    let onTap: (String) -> Void
 
-    var bodyContent: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Display the image if available
             if let imageURL = article.image?.filename, let url = URL(string: imageURL) {
@@ -61,5 +62,9 @@ struct ArticleCardView: ViewComponent {
         .background(Color(.systemGray6))
         .cornerRadius(12)
         .shadow(radius: 4)
+        .onTapGesture {
+            onTap(article.fullSlug)
+        }
     }
 }
+

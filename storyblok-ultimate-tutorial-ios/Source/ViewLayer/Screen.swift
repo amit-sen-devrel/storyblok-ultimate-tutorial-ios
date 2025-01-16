@@ -55,7 +55,7 @@ extension Screen {
                 }
             }
             .navigationTitle(title ?? "")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }

@@ -34,4 +34,10 @@ struct Story: Codable {
 struct Relation: Codable {
     let uuid: String
     let content: [String: ContentValue]
+    let fullSlug: String
+
+    private enum CodingKeys: String, CodingKey {
+        case uuid, content
+        case fullSlug = "full_slug"
+    }
 }

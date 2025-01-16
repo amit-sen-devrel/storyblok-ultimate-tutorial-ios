@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct PopularArticlesBlockView: ViewComponent {
+struct PopularArticlesBlockView: View {
     let block: PopularArticlesBlock
+    let onArticleSelected: (String) -> Void
 
-    var bodyContent: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(block.headline)
                 .font(.title2)
@@ -18,8 +19,10 @@ struct PopularArticlesBlockView: ViewComponent {
                 .padding(.horizontal)
 
             ForEach(block.resolvedArticles ?? [], id: \.uuid) { article in
-                ArticleCardView(article: article)
-                    .padding(.horizontal)
+                ArticleCardView(article: article) { fullSlug in
+                    onArticleSelected(fullSlug)
+                }
+                .padding(.horizontal)
             }
         }
         .padding(.vertical)

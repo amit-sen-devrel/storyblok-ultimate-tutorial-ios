@@ -29,11 +29,12 @@ extension PopularArticlesBlock {
             // Map the resolved content to an ArticleCard object
             return ArticleCard(
                 uuid: uuid,
-                title: resolvedContent["title"]?.toString() ?? "",
-                teaser: resolvedContent["teaser"]?.toString() ?? "",
-                image: resolvedContent["image"]?.toAsset(),
-                fullSlug: resolvedContent["full_slug"]?.toString() ?? ""
+                title: resolvedContent["title"]?.toString() ?? "", // Extract title
+                teaser: resolvedContent["teaser"]?.toString() ?? "", // Extract teaser
+                image: resolvedContent["image"]?.toAsset(), // Extract image as Asset
+                fullSlug: resolvedContent["full_slug"]?.toString() ?? "" // Extract full_slug
             )
         }
     }
 }
+

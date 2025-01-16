@@ -104,4 +104,14 @@ extension ContentValue {
         }
         return nil
     }
+    
+    func toRichText() -> [RichTextNode]? {
+        if case let .dictionary(value) = self {
+            if let data = try? JSONEncoder().encode(value),
+               let nodes = try? JSONDecoder().decode([RichTextNode].self, from: data) {
+                return nodes
+            }
+        }
+        return nil
+    }
 }
