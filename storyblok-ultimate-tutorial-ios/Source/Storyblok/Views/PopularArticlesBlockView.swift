@@ -1,0 +1,27 @@
+//
+//  PopularArticlesBlockView.swift
+//  storyblok-ultimate-tutorial-ios
+//
+//  Created by Amit Sen on 16.01.25.
+//
+
+import SwiftUI
+
+struct PopularArticlesBlockView: ViewComponent {
+    let block: PopularArticlesBlock
+
+    var bodyContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(block.headline)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.horizontal)
+
+            ForEach(block.resolvedArticles ?? [], id: \.uuid) { article in
+                ArticleCardView(article: article)
+                    .padding(.horizontal)
+            }
+        }
+        .padding(.vertical)
+    }
+}

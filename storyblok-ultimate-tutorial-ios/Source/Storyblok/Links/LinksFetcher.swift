@@ -9,6 +9,10 @@
 import Foundation
 import Combine
 
+protocol LinksFetcherProtocol {
+    func fetchLinks() -> AnyPublisher<[String: Link], NetworkError>
+}
+
 final class LinksFetcher: LinksFetcherProtocol {
     private let networkManager: NetworkManager
     

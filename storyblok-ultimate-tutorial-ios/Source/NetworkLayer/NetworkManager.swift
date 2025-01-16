@@ -58,6 +58,7 @@ final class NetworkManager {
                 }
                 return NetworkError.requestFailed(error)
             }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
     
