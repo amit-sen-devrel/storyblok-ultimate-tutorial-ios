@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct ArticleCardView: View {
+struct ArticleCardView: ViewComponent {
     let article: ArticleCard
     let onTap: (String) -> Void
 
-    var body: some View {
+    var bodyContent: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Display the image if available
             if let imageURL = article.image?.filename, let url = URL(string: imageURL) {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// A protocol for feature-rich screens in the app.
 protocol Screen: View {
     associatedtype Content: View
     
@@ -22,40 +21,48 @@ protocol Screen: View {
     
     /// Error message for the screen, if any.
     var errorMessage: String? { get }
+    
+    /// Navigation path for dynamic navigation.
+    var navigationPath: Binding<NavigationPath> { get }
 }
 
-/// Provide default implementations for optional properties.
 extension Screen {
     var title: String? { nil }
     var isLoading: Bool { false }
     var errorMessage: String? { nil }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                // Screen content
-                bodyContent
-                
-                // Loading Indicator
-                if isLoading {
+        ZStack {
+            // Screen content
+            bodyContent
+            
+            // Loading Indicator
+            if isLoading {
+                ZStack {
+                    Color.black.opacity(0.5) // Optional dimmed background
+                        .ignoresSafeArea()
                     ProgressView("Loading...")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.black.opacity(0.5))
                         .foregroundColor(.white)
-                }
-                
-                // Error Message
-                if let errorMessage = errorMessage {
-                    VStack {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
-                        Spacer()
-                    }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.white.opacity(0.9))
+                        )
+                        .shadow(radius: 10)
                 }
             }
-            .navigationTitle(title ?? "")
-            .navigationBarTitleDisplayMode(.large)
+            
+            // Error Message
+            if let errorMessage = errorMessage {
+                VStack {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
+                    Spacer()
+                }
+            }
         }
+        .navigationTitle(title ?? "")
+        .navigationBarTitleDisplayMode(.large)
     }
 }

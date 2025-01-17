@@ -17,7 +17,7 @@ final class HomeViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var cancellables = Set<AnyCancellable>()
-    private let storyFetcher: StoryFetcher
+    let storyFetcher: StoryFetcher
     
     // MARK: - Initializer
     init(storyFetcher: StoryFetcher) {

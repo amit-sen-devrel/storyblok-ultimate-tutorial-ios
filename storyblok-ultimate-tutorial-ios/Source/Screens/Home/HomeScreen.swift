@@ -9,16 +9,17 @@ import SwiftUI
 
 struct HomeScreen: Screen {
     @StateObject private var viewModel: HomeViewModel
-    @State private var navigationPath = NavigationPath()
+    var navigationPath: Binding<NavigationPath>
 
     // MARK: - Initializer
-    init(viewModel: HomeViewModel) {
+    init(viewModel: HomeViewModel, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.navigationPath = navigationPath
     }
 
     // MARK: - Screen Title
     var title: String? {
-        nil
+        "Home"
     }
 
     // MARK: - Loading and Error State
@@ -32,26 +33,27 @@ struct HomeScreen: Screen {
 
     // MARK: - Screen Content
     var bodyContent: some View {
-        NavigationStack(path: $navigationPath) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    ForEach(viewModel.blocks.indices, id: \.self) { index in
-                        if let heroBlock = viewModel.blocks[index] as? HeroBlock {
-                            HeroBlockView(block: heroBlock)
-                        } else if let popularArticlesBlock = viewModel.blocks[index] as? PopularArticlesBlock {
-                            PopularArticlesBlockView(block: popularArticlesBlock) { fullSlug in
-                                // Append the slug to the navigation path
-                                navigationPath.append(fullSlug)
-                            }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                ForEach(viewModel.blocks.indices, id: \.self) { index in
+                    if let heroBlock = viewModel.blocks[index] as? HeroBlock {
+                        HeroBlockView(block: heroBlock)
+                    } else if let popularArticlesBlock = viewModel.blocks[index] as? PopularArticlesBlock {
+                        PopularArticlesBlockView(block: popularArticlesBlock) { fullSlug in
+                            // Append the slug to the navigation path
+                            navigationPath.wrappedValue.append(fullSlug)
                         }
                     }
                 }
-                .padding()
             }
-            .navigationTitle("Home")
-            .navigationDestination(for: String.self) { fullSlug in
-                ArticleScreen(fullSlug: fullSlug, storyFetcher: StoryFetcher(networkManager: NetworkManager()))
-            }
+            .padding()
+        }
+        .navigationDestination(for: String.self) { fullSlug in
+            SingleArticleScreen(
+                fullSlug: fullSlug,
+                storyFetcher: viewModel.storyFetcher,
+                navigationPath: navigationPath
+            )
         }
         .onAppear {
             viewModel.fetchHomeStory()

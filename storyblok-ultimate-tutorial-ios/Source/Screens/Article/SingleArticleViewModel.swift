@@ -1,5 +1,5 @@
 //
-//  ArticleViewModel.swift
+//  SingleArticleViewModel.swift
 //  storyblok-ultimate-tutorial-ios
 //
 //  Created by Amit Sen on 16.01.25.
@@ -8,7 +8,7 @@
 
 import Combine
 
-final class ArticleViewModel: ObservableObject {
+final class SingleArticleViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var articleBlock: ArticleBlock?

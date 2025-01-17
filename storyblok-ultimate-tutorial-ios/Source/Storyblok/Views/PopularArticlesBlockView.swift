@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PopularArticlesBlockView: View {
+struct PopularArticlesBlockView: ViewComponent {
     let block: PopularArticlesBlock
     let onArticleSelected: (String) -> Void
 
-    var body: some View {
+    var bodyContent: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(block.headline)
                 .font(.title2)

@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct RichTextView: View {
+struct RichTextView: ViewComponent {
     let nodes: [RichTextNode]
     
-    var body: some View {
+    var bodyContent: some View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(Array(nodes.enumerated()), id: \.offset) { index, node in
                 renderNode(node)

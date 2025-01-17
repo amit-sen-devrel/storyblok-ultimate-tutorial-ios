@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct ArticleBlockView: View {
+struct ArticleBlockView: ViewComponent {
     let block: ArticleBlock
 
-    var body: some View {
+    var bodyContent: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Display the image if available
             if let imageURL = block.image?.filename, let url = URL(string: imageURL) {
