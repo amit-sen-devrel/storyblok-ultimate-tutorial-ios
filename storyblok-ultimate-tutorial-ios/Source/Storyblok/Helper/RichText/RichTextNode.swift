@@ -21,9 +21,22 @@ enum RichTextMark: String, Codable {
 }
 
 struct RichTextNode: Codable, Identifiable {
-    var id = UUID() // Unique identifier for SwiftUI
+    var id = UUID() // Ensures a unique identifier
     let type: RichTextType
     let content: [RichTextNode]?
     let text: String?
     let marks: [RichTextMark]?
+}
+
+
+enum RichTextChunk {
+    case paragraph(String) // Plain paragraph text
+    case text(String, marks: [RichTextMark]) // Inline text with optional marks
+    case orderedList([OrderedListItem]) // Ordered list with nested items
+    case hardBreak // Line break
+
+    struct OrderedListItem {
+        let order: Int // Item number in the list
+        let content: [RichTextChunk] // Nested content for the list item
+    }
 }

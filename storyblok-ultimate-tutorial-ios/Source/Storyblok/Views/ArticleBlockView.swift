@@ -39,9 +39,9 @@ struct ArticleBlockView: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
 
-            // Display the rich text content
+            // Use RichTextView to display the rich text content
             if let richContent = block.richContent {
-                RichTextParser.parse(content: richContent)
+                RichTextView(nodes: richContent)
             }
         }
         .padding()

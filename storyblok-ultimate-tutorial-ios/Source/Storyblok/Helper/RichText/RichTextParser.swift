@@ -6,76 +6,45 @@
 //
 
 
-import SwiftUI
-
 struct RichTextParser {
-    static func parse(content: [RichTextNode]) -> AnyView {
-        VStack(alignment: .leading, spacing: 8) {
-            ForEach(content, id: \.id) { node in
-                parseNode(node)
-            }
-        }
-        .eraseToAnyView()
-    }
-    
-    private static func parseNode(_ node: RichTextNode) -> AnyView {
-        switch node.type {
-        case .paragraph:
-            return parseParagraph(node.content).eraseToAnyView()
-        case .orderedList:
-            return parseOrderedList(node.content).eraseToAnyView()
-        case .listItem:
-            return parseListItem(node.content).eraseToAnyView()
-        case .text:
-            return parseText(node).eraseToAnyView()
-        case .hardBreak:
-            return Text("\n").eraseToAnyView()
-        }
-    }
-    
-    private static func parseParagraph(_ content: [RichTextNode]?) -> AnyView {
-        guard let content = content else { return EmptyView().eraseToAnyView() }
-        return Text(content.map { $0.text ?? "" }.joined())
-            .lineLimit(nil)
-            .eraseToAnyView()
-    }
-    
-    private static func parseOrderedList(_ content: [RichTextNode]?) -> AnyView {
-        guard let content = content else { return EmptyView().eraseToAnyView() }
-        return VStack(alignment: .leading, spacing: 4) {
-            ForEach(Array(content.enumerated()), id: \.offset) { index, node in
-                HStack(alignment: .top, spacing: 4) {
-                    Text("\(index + 1).")
-                        .bold()
-                    parseNode(node)
-                }
-            }
-        }
-        .eraseToAnyView()
-    }
-    
-    private static func parseListItem(_ content: [RichTextNode]?) -> AnyView {
-        guard let content = content else { return EmptyView().eraseToAnyView() }
-        return VStack(alignment: .leading, spacing: 4) {
-            ForEach(content, id: \.id) { node in
-                parseNode(node)
-            }
-        }
-        .eraseToAnyView()
-    }
-    
-    private static func parseText(_ node: RichTextNode) -> AnyView {
-        var text = Text(node.text ?? "")
-        if let marks = node.marks, marks.contains(.bold) {
-            text = text.bold()
-        }
-        return text.eraseToAnyView()
-    }
-}
+    static func parse(content: [ContentValue]) -> [RichTextNode]? {
+        var nodes: [RichTextNode] = []
 
-// Helper to erase to AnyView
-extension View {
-    func eraseToAnyView() -> AnyView {
-        AnyView(self)
+        for item in content {
+            if case let .dictionary(value) = item {
+                // Decode the node type
+                guard let typeString = value["type"]?.toString(),
+                      let type = RichTextType(rawValue: typeString) else { continue }
+
+                // Parse the marks, if available
+                let marks: [RichTextMark]? = {
+                    if let marksArray = value["marks"]?.toArray() {
+                        return marksArray.compactMap { markValue in
+                            if case let .dictionary(markDict) = markValue,
+                               let markType = markDict["type"]?.toString(),
+                               let richTextMark = RichTextMark(rawValue: markType) {
+                                return richTextMark
+                            }
+                            return nil
+                        }
+                    }
+                    return nil
+                }()
+
+                // Parse the child content recursively
+                let childContent = value["content"]?.toArray().flatMap(parse)
+
+                // Create a RichTextNode
+                let node = RichTextNode(
+                    type: type,
+                    content: childContent,
+                    text: value["text"]?.toString(),
+                    marks: marks
+                )
+                nodes.append(node)
+            }
+        }
+
+        return nodes
     }
 }

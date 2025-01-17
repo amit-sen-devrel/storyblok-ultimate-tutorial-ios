@@ -10,26 +10,26 @@ import SwiftUI
 
 struct ArticleScreen: Screen {
     @StateObject private var viewModel: ArticleViewModel
-
+    
     // MARK: - Initializer
     init(fullSlug: String, storyFetcher: StoryFetcher) {
         _viewModel = StateObject(wrappedValue: ArticleViewModel(fullSlug: fullSlug, storyFetcher: storyFetcher))
     }
-
+    
     // MARK: - Screen Title
     var title: String? {
         viewModel.articleBlock?.title
     }
-
+    
     // MARK: - Loading and Error State
     var isLoading: Bool {
         viewModel.isLoading
     }
-
+    
     var errorMessage: String? {
         viewModel.errorMessage
     }
-
+    
     // MARK: - Screen Content
     var bodyContent: some View {
         ScrollView {
@@ -45,6 +45,14 @@ struct ArticleScreen: Screen {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VStack {
+                    Text(title ?? "Article").font(.headline)
+                        .multilineTextAlignment(.center)
+                }
+            }
+        }
         .onAppear {
             viewModel.fetchArticle()
         }

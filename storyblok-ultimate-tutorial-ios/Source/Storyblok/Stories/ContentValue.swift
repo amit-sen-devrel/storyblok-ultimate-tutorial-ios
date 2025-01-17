@@ -106,12 +106,13 @@ extension ContentValue {
     }
     
     func toRichText() -> [RichTextNode]? {
-        if case let .dictionary(value) = self {
-            if let data = try? JSONEncoder().encode(value),
-               let nodes = try? JSONDecoder().decode([RichTextNode].self, from: data) {
-                return nodes
+            // Ensure the top-level structure is a dictionary with "type: doc"
+            if case let .dictionary(value) = self,
+               value["type"]?.toString() == "doc",
+               let contentArray = value["content"]?.toArray() {
+                // Parse the "content" array recursively
+                return RichTextParser.parse(content: contentArray)
             }
+            return nil
         }
-        return nil
-    }
 }
