@@ -50,7 +50,7 @@ final class ArticlesViewModel: ObservableObject {
                         title: story.content.fields["title"]?.toString() ?? "No Title",
                         teaser: story.content.fields["teaser"]?.toString() ?? "",
                         image: story.content.fields["image"]?.toAsset(),
-                        fullSlug: story.fullSlug
+                        fullSlug: story.slug
                     )
                 }
             })

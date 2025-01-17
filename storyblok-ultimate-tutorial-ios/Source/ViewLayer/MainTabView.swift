@@ -48,8 +48,7 @@ struct MainTabView: View {
             }
             
             NavigationStack(path: $languageNavigationPath) {
-                Text("Language Settings Screen Placeholder")
-                    .font(.title)
+                LanguageSettingsScreen(navigationPath: $languageNavigationPath)
             }
             .tabItem {
                 Label(TabScreen.language.title, systemImage: TabScreen.language.icon)

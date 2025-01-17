@@ -37,7 +37,8 @@ final class StoryFetcher: StoryFetcherProtocol {
         let path = "/stories/\(slug)"
         var parameters: [String: String] = [
             "version": "published",
-            "token": "0cQ0rLotjXQYEWtMK5aBWgtt"
+            "token": "0cQ0rLotjXQYEWtMK5aBWgtt",
+            "language": AppState.shared.language.code ?? ""
         ]
         
         // Add the resolve_relations parameter if provided
@@ -55,7 +56,8 @@ final class StoryFetcher: StoryFetcherProtocol {
         let path = "/stories"
         var parameters: [String: String] = [
             "version": "published",
-            "token": "0cQ0rLotjXQYEWtMK5aBWgtt"
+            "token": "0cQ0rLotjXQYEWtMK5aBWgtt",
+            "language": AppState.shared.language.code ?? ""
         ]
         
         // Add the resolve_relations parameter if provided

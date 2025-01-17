@@ -39,7 +39,7 @@ struct Relation: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case uuid, content
-        case fullSlug = "full_slug"
+        case fullSlug = "slug"
     }
 }
 

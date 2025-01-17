@@ -17,6 +17,7 @@ struct storyblok_ultimate_tutorial_iosApp: App {
 
             // Pass the dependencies to MainTabView
             MainTabView(storyFetcher: storyFetcher)
+                .environmentObject(AppState.shared)
         }
     }
 }

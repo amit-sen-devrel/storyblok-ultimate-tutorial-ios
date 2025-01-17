@@ -10,27 +10,27 @@ import SwiftUI
 struct HomeScreen: Screen {
     @StateObject private var viewModel: HomeViewModel
     var navigationPath: Binding<NavigationPath>
-
+    
     // MARK: - Initializer
     init(viewModel: HomeViewModel, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: viewModel)
         self.navigationPath = navigationPath
     }
-
+    
     // MARK: - Screen Title
     var title: String? {
         "Home"
     }
-
+    
     // MARK: - Loading and Error State
     var isLoading: Bool {
         viewModel.isLoading
     }
-
+    
     var errorMessage: String? {
         viewModel.errorMessage
     }
-
+    
     // MARK: - Screen Content
     var bodyContent: some View {
         ScrollView {

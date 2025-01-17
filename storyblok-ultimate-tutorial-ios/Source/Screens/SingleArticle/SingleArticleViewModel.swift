@@ -26,7 +26,7 @@ final class SingleArticleViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        storyFetcher.fetchStory(slug: fullSlug)
+        storyFetcher.fetchStory(slug: "blogs/\(fullSlug)")
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false

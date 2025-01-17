@@ -32,7 +32,7 @@ extension PopularArticlesBlock {
                 title: resolvedContent["title"]?.toString() ?? "", // Extract title
                 teaser: resolvedContent["teaser"]?.toString() ?? "", // Extract teaser
                 image: resolvedContent["image"]?.toAsset(), // Extract image as Asset
-                fullSlug: resolvedContent["full_slug"]?.toString() ?? "" // Extract full_slug
+                fullSlug: resolvedContent["slug"]?.toString() ?? "" // Extract slug
             )
         }
     }

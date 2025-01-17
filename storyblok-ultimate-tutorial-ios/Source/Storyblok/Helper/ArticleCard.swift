@@ -14,7 +14,7 @@ struct ArticleCard: Codable {
     let fullSlug: String
     
     private enum CodingKeys: String, CodingKey {
-        case uuid, fullSlug = "full_slug"
+        case uuid, fullSlug = "slug"
         case title, teaser, image
     }
 }

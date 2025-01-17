@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct SingleArticleScreen: Screen {
+    
     @StateObject private var viewModel: SingleArticleViewModel
     var navigationPath: Binding<NavigationPath> // Conform to the protocol
 
@@ -37,10 +38,6 @@ struct SingleArticleScreen: Screen {
         ScrollView {
             if let articleBlock = viewModel.articleBlock {
                 ArticleBlockView(block: articleBlock)
-            } else if let errorMessage = viewModel.errorMessage {
-                Text("Error: \(errorMessage)")
-                    .foregroundColor(.red)
-                    .padding()
             }
         }
         .navigationBarTitleDisplayMode(.inline)

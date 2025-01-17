@@ -51,7 +51,7 @@ final class StoryRelationResolver {
             if let relation = relsDictionary[uuid] {
                 // Include top-level fields (e.g., `full_slug`) in the resolved content
                 var resolvedContent = relation.content
-                resolvedContent["full_slug"] = .string(relation.fullSlug)
+                resolvedContent["slug"] = .string(relation.fullSlug)
                 return .dictionary(resolvedContent.mapValues { resolveContentValue($0) })
             }
             return value
