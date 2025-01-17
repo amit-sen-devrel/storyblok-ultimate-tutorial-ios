@@ -10,46 +10,48 @@ import SwiftUI
 
 struct MainTabView: View {
     let storyFetcher: StoryFetcher
-
+    
     @State private var homeNavigationPath = NavigationPath()
     @State private var articlesNavigationPath = NavigationPath()
     @State private var aboutNavigationPath = NavigationPath()
     @State private var languageNavigationPath = NavigationPath()
-
+    
     var body: some View {
         TabView {
             NavigationStack(path: $homeNavigationPath) {
                 HomeScreen(
-                    viewModel: HomeViewModel(storyFetcher: storyFetcher),
+                    viewModel: HomeViewModel(storyFetcher: storyFetcher, slug: TabScreen.home.slug),
                     navigationPath: $homeNavigationPath
                 )
             }
             .tabItem {
-                Label("Home", systemImage: "house")
+                Label(TabScreen.home.title, systemImage: TabScreen.home.icon)
             }
-
+            
             NavigationStack(path: $articlesNavigationPath) {
-                Text("Articles Screen Placeholder")
-                    .font(.title)
+                ArticlesScreen(
+                    viewModel: ArticlesViewModel(storyFetcher: storyFetcher),
+                    navigationPath: $articlesNavigationPath
+                )
             }
             .tabItem {
-                Label("Articles", systemImage: "doc.text")
+                Label(TabScreen.articles.title, systemImage: TabScreen.articles.icon)
             }
-
+            
             NavigationStack(path: $aboutNavigationPath) {
                 Text("About Screen Placeholder")
                     .font(.title)
             }
             .tabItem {
-                Label("About", systemImage: "info.circle")
+                Label(TabScreen.about.title, systemImage: TabScreen.about.icon)
             }
-
+            
             NavigationStack(path: $languageNavigationPath) {
                 Text("Language Settings Screen Placeholder")
                     .font(.title)
             }
             .tabItem {
-                Label("Language", systemImage: "globe")
+                Label(TabScreen.language.title, systemImage: TabScreen.language.icon)
             }
         }
     }

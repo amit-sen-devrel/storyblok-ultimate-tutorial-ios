@@ -25,7 +25,9 @@ struct RichTextView: ViewComponent {
         case .paragraph:
             renderParagraph(node)
         case .orderedList:
-            renderOrderedList(node)
+            renderList(node, isOrdered: true)
+        case .bulletList:
+            renderList(node, isOrdered: false)
         case .listItem:
             renderListItem(node)
         case .text:
@@ -46,25 +48,42 @@ struct RichTextView: ViewComponent {
         }
     }
     
-    private func renderOrderedList(_ node: RichTextNode) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let items = node.content {
-                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                    HStack(alignment: .top, spacing: 8) {
-                        Text("\(index + 1).")
-                            .bold()
-                        RichTextView(nodes: item.content ?? [])
-                    }
-                }
-            }
-        }
-    }
+//    private func renderOrderedList(_ node: RichTextNode) -> some View {
+//        VStack(alignment: .leading, spacing: 4) {
+//            if let items = node.content {
+//                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+//                    HStack(alignment: .top, spacing: 8) {
+//                        Text("\(index + 1).")
+//                            .bold()
+//                        RichTextView(nodes: item.content ?? [])
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     private func renderListItem(_ node: RichTextNode) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             if let content = node.content {
                 ForEach(content, id: \.id) { childNode in
                     renderNode(childNode)
+                }
+            }
+        }
+    }
+    
+    private func renderList(_ node: RichTextNode, isOrdered: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if let items = node.content {
+                ForEach(items.indices, id: \.self) { index in
+                    HStack(alignment: .top, spacing: 8) {
+                        if isOrdered {
+                            Text("\(index + 1).").bold()
+                        } else {
+                            Text("•").bold() // Bullet for unordered list
+                        }
+                        renderNode(items[index])
+                    }
                 }
             }
         }

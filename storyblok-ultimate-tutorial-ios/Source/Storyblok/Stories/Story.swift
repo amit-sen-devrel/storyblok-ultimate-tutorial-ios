@@ -14,6 +14,7 @@ struct StoryResponse: Codable {
 
 
 struct Story: Codable {
+    let uuid: String
     let name: String
     let content: Content  // Replace `StoryContent` with `Content` for dynamic handling
     let slug: String
@@ -23,7 +24,7 @@ struct Story: Codable {
     let updatedAt: String
     
     private enum CodingKeys: String, CodingKey {
-        case name, content, slug
+        case uuid, name, content, slug
         case fullSlug = "full_slug"
         case createdAt = "created_at"
         case publishedAt = "published_at"
@@ -40,4 +41,10 @@ struct Relation: Codable {
         case uuid, content
         case fullSlug = "full_slug"
     }
+}
+
+struct MultipleStoriesResponse: Codable {
+    let stories: [Story]
+    let cv: Int
+    let rels: [Relation]  // Add this for relation resolution
 }

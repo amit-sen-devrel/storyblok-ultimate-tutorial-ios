@@ -1,5 +1,5 @@
 //
-//  PopularArticlesBlockView.swift
+//  ArticlesBlockView.swift
 //  storyblok-ultimate-tutorial-ios
 //
 //  Created by Amit Sen on 16.01.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PopularArticlesBlockView: ViewComponent {
+struct ArticlesBlockView: ViewComponent {
     let block: PopularArticlesBlock
     let onArticleSelected: (String) -> Void
 

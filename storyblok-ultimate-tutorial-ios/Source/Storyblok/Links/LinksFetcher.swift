@@ -28,7 +28,6 @@ final class LinksFetcher: LinksFetcherProtocol {
     func fetchLinks() -> AnyPublisher<[String: Link], NetworkError> {
         let path = "/links"
         let parameters: [String: String] = [
-            "cv": "1736848911",
             "token": "0cQ0rLotjXQYEWtMK5aBWgtt",
             "version": "published"
         ]

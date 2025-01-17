@@ -12,6 +12,7 @@ enum RichTextType: String, Codable {
     case paragraph
     case text
     case orderedList = "ordered_list"
+    case bulletList = "bullet_list"
     case listItem = "list_item"
     case hardBreak = "hard_break"
 }

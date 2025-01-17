@@ -15,14 +15,16 @@ final class HomeViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var blocks: [Decodable] = []
     
+    private let slug: String
+    
     // MARK: - Private Properties
     private var cancellables = Set<AnyCancellable>()
     let storyFetcher: StoryFetcher
     
     // MARK: - Initializer
-    init(storyFetcher: StoryFetcher) {
+    init(storyFetcher: StoryFetcher, slug: String? = nil) {
         self.storyFetcher = storyFetcher
-        print("HomeViewModel initialized")
+        self.slug = slug ?? ""
     }
     
     // MARK: - Fetch Home Story
@@ -30,7 +32,7 @@ final class HomeViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        storyFetcher.fetchStory(slug: "home", resolveRelations: ["popular-articles.articles"])
+        storyFetcher.fetchStory(slug: self.slug, resolveRelations: ["popular-articles.articles"])
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false

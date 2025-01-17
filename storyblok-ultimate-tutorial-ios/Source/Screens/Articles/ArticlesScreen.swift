@@ -1,25 +1,26 @@
 //
-//  HomeScreen.swift
+//  ArticlesScreen.swift
 //  storyblok-ultimate-tutorial-ios
 //
-//  Created by Amit Sen on 16.01.25.
+//  Created by Amit Sen on 17.01.25.
 //
+
 
 import SwiftUI
 
-struct HomeScreen: Screen {
-    @StateObject private var viewModel: HomeViewModel
+struct ArticlesScreen: Screen {
+    @StateObject private var viewModel: ArticlesViewModel
     var navigationPath: Binding<NavigationPath>
 
     // MARK: - Initializer
-    init(viewModel: HomeViewModel, navigationPath: Binding<NavigationPath>) {
+    init(viewModel: ArticlesViewModel, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: viewModel)
         self.navigationPath = navigationPath
     }
 
     // MARK: - Screen Title
     var title: String? {
-        "Home"
+        "Articles"
     }
 
     // MARK: - Loading and Error State
@@ -35,18 +36,14 @@ struct HomeScreen: Screen {
     var bodyContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                ForEach(viewModel.blocks.indices, id: \.self) { index in
-                    if let heroBlock = viewModel.blocks[index] as? HeroBlock {
-                        HeroBlockView(block: heroBlock)
-                    } else if let popularArticlesBlock = viewModel.blocks[index] as? PopularArticlesBlock {
-                        ArticlesBlockView(block: popularArticlesBlock) { fullSlug in
-                            // Append the slug to the navigation path
-                            navigationPath.wrappedValue.append(fullSlug)
-                        }
+                ForEach(viewModel.articleCards, id: \.uuid) { articleCard in
+                    ArticleCardView(article: articleCard) { fullSlug in
+                        navigationPath.wrappedValue.append(fullSlug)
                     }
+                    .padding(.horizontal)
                 }
             }
-            .padding()
+            .padding(.vertical)
         }
         .navigationDestination(for: String.self) { fullSlug in
             SingleArticleScreen(
@@ -56,7 +53,7 @@ struct HomeScreen: Screen {
             )
         }
         .onAppear {
-            viewModel.fetchHomeStory()
+            viewModel.fetchAllArticles()
         }
     }
 }

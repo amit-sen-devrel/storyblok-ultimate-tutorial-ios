@@ -19,12 +19,12 @@ final class BlockMapper {
                 switch component {
                 case "hero":
                     return try? JSONDecoder().decode(HeroBlock.self, from: data)
-                case "popular-articles":
-                    var popularArticles = try? JSONDecoder().decode(PopularArticlesBlock.self, from: data)
+                case "popular-articles", "all-articles":
+                    var articles = try? JSONDecoder().decode(PopularArticlesBlock.self, from: data)
                     if let resolver {
-                        popularArticles?.resolveRelations(using: resolver)
+                        articles?.resolveRelations(using: resolver)
                     }
-                    return popularArticles
+                    return articles
                 default:
                     print("Unhandled block type: \(component)")
                     return nil
