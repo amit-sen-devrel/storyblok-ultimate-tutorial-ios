@@ -68,6 +68,15 @@ extension ContentValue {
         return nil
     }
     
+    func toInt() -> Int? {
+        if case let .int(value) = self {
+            return value
+        } else if case let .string(value) = self, let intValue = Int(value) {
+            return intValue
+        }
+        return nil
+    }
+    
     func toAsset() -> Asset? {
         if case let .dictionary(value) = self {
             do {
@@ -106,13 +115,13 @@ extension ContentValue {
     }
     
     func toRichText() -> [RichTextNode]? {
-            // Ensure the top-level structure is a dictionary with "type: doc"
-            if case let .dictionary(value) = self,
-               value["type"]?.toString() == "doc",
-               let contentArray = value["content"]?.toArray() {
-                // Parse the "content" array recursively
-                return RichTextParser.parse(content: contentArray)
-            }
-            return nil
+        // Ensure the top-level structure is a dictionary with "type: doc"
+        if case let .dictionary(value) = self,
+           value["type"]?.toString() == "doc",
+           let contentArray = value["content"]?.toArray() {
+            // Parse the "content" array recursively
+            return RichTextParser.parse(content: contentArray)
         }
+        return nil
+    }
 }

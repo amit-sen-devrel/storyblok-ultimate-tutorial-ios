@@ -39,8 +39,9 @@ struct MainTabView: View {
             }
             
             NavigationStack(path: $aboutNavigationPath) {
-                Text("About Screen Placeholder")
-                    .font(.title)
+                AboutScreen(viewModel: AboutViewModel(
+                    storyFetcher: storyFetcher, slug: TabScreen.about.slug
+                ), navigationPath: $aboutNavigationPath)
             }
             .tabItem {
                 Label(TabScreen.about.title, systemImage: TabScreen.about.icon)

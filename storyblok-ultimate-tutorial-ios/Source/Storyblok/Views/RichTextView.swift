@@ -34,6 +34,10 @@ struct RichTextView: ViewComponent {
             renderText(node)
         case .hardBreak:
             renderHardBreak()
+        case .horizontalRule:
+            Divider()
+        case .heading:
+            renderHeading(node)
         }
     }
     
@@ -47,20 +51,6 @@ struct RichTextView: ViewComponent {
             }
         }
     }
-    
-//    private func renderOrderedList(_ node: RichTextNode) -> some View {
-//        VStack(alignment: .leading, spacing: 4) {
-//            if let items = node.content {
-//                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-//                    HStack(alignment: .top, spacing: 8) {
-//                        Text("\(index + 1).")
-//                            .bold()
-//                        RichTextView(nodes: item.content ?? [])
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     private func renderListItem(_ node: RichTextNode) -> some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -99,5 +89,24 @@ struct RichTextView: ViewComponent {
     
     private func renderHardBreak() -> some View {
         Text("\n")
+    }
+    
+    private func renderHeading(_ node: RichTextNode) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if let content = node.content {
+                let level = node.attrs?["level"]?.toInt() ?? 1
+                let text = Text(content.compactMap { $0.text }.joined())
+                switch level {
+                case 1:
+                    text.font(.largeTitle).fontWeight(.bold)
+                case 2:
+                    text.font(.title).fontWeight(.bold)
+                case 3:
+                    text.font(.title3).fontWeight(.semibold)
+                default:
+                    text.font(.body).fontWeight(.regular)
+                }
+            }
+        }
     }
 }

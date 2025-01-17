@@ -15,6 +15,8 @@ enum RichTextType: String, Codable {
     case bulletList = "bullet_list"
     case listItem = "list_item"
     case hardBreak = "hard_break"
+    case horizontalRule = "horizontal_rule"
+    case heading
 }
 
 enum RichTextMark: String, Codable {
@@ -22,11 +24,12 @@ enum RichTextMark: String, Codable {
 }
 
 struct RichTextNode: Codable, Identifiable {
-    var id = UUID() // Ensures a unique identifier
+    var id = UUID()
     let type: RichTextType
     let content: [RichTextNode]?
     let text: String?
     let marks: [RichTextMark]?
+    let attrs: [String: ContentValue]? // Attributes for specific types (e.g., heading level)
 }
 
 

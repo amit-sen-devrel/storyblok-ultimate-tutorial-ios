@@ -31,6 +31,14 @@ struct RichTextParser {
                     return nil
                 }()
 
+                // Parse attributes, if available
+                let attrs: [String: ContentValue]? = {
+                    if let attributes = value["attrs"]?.toDictionary() {
+                        return attributes
+                    }
+                    return nil
+                }()
+
                 // Parse the child content recursively
                 let childContent = value["content"]?.toArray().flatMap(parse)
 
@@ -39,7 +47,8 @@ struct RichTextParser {
                     type: type,
                     content: childContent,
                     text: value["text"]?.toString(),
-                    marks: marks
+                    marks: marks,
+                    attrs: attrs // Add attributes
                 )
                 nodes.append(node)
             }
