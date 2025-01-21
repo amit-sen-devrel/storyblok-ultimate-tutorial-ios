@@ -61,5 +61,3 @@ struct HeroBlockView: ViewComponent {
         .frame(maxWidth: .infinity, alignment: .center)
     }
 }
-
-

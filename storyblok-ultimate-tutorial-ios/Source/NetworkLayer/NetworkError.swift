@@ -4,71 +4,78 @@
 //
 //  Created by Amit Sen on 14.01.25.
 //
-
+//
+//  This file defines an enumeration of network errors for handling common issues during API requests.
+//  It provides descriptive error messages to improve debugging and error reporting.
+//
 
 import Foundation
 
-/// An enumeration of network errors.
+/// An enumeration of network errors that can occur during API interactions.
+/// Conforms to the `Error` and `LocalizedError` protocols for integration with Swift's error handling mechanisms.
+///
 /// Source: https://www.storyblok.com/docs/api/content-delivery/v2/getting-started/errors
-/// 
+///
 enum NetworkError: Error, LocalizedError {
-    // MARK: - Cases
     
-    /// The URL is invalid.
+    // MARK: - Error Cases
+    
+    /// Indicates that the provided URL is invalid.
     case invalidURL
     
-    /// The request failed.
+    /// Indicates that the request failed due to an underlying error.
     case requestFailed(Error)
     
-    /// The request is unauthorized.
+    /// Indicates that the request is unauthorized (e.g., invalid or missing API key).
     case unauthorized
     
-    /// The requested resource doesn't exist.
+    /// Indicates that the requested resource could not be found.
     case notFound
     
-    /// The request is bad.
+    /// Indicates that the request format or parameters are invalid.
     case badRequest
     
-    /// The request contains invalid data.
+    /// Indicates that the request contains invalid or unprocessable data.
     case unprocessableEntity
     
-    /// The rate limit has been exceeded.
+    /// Indicates that the client has exceeded the rate limit for API requests.
     case tooManyRequests
     
-    /// A server error occurred.
+    /// Indicates that a server-side error occurred.
     case serverError
     
-    /// The response is invalid.
+    /// Indicates that the API response is invalid or unexpected.
     case invalidResponse
     
-    /// Decoding the response failed
+    /// Indicates that decoding the response into the expected model failed.
     case decodingFailed(Error)
     
     // MARK: - Computed Properties
     
-    /// Returns the error description for each case
+    /// A user-friendly description of the error.
+    /// This property provides detailed information about the error to help with debugging and user feedback.
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "The URL is invalid."
+            return "The URL provided is invalid. Please check the URL format."
         case .requestFailed(let error):
-            return "Request failed with error: \(error.localizedDescription)"
+            return "The request failed due to an error: \(error.localizedDescription)"
         case .unauthorized:
-            return "Unauthorized: Please check your API key."
+            return "Unauthorized access. Please verify your API key or authentication credentials."
         case .notFound:
-            return "Not Found: The requested resource doesn't exist."
+            return "The requested resource could not be found. It may not exist or be published."
         case .badRequest:
-            return "Bad Request: Invalid format or missing parameters."
+            return "Bad request. Please ensure all required parameters and formats are correct."
         case .unprocessableEntity:
-            return "Unprocessable Entity: Request contains invalid data."
+            return "The request contains invalid data and cannot be processed."
         case .tooManyRequests:
-            return "Too Many Requests: You have exceeded the rate limit."
+            return "You have exceeded the rate limit for API requests. Please slow down."
         case .serverError:
-            return "Server Error: Something went wrong on the server."
+            return "A server error occurred. Please try again later."
         case .invalidResponse:
-            return "Invalid Response: Unexpected response format."
+            return "The server returned an invalid or unexpected response."
         case .decodingFailed(let error):
-            return "Decoding Failed: \(error.localizedDescription)"
+            return "Failed to decode the response. Error: \(error.localizedDescription)"
         }
     }
 }
