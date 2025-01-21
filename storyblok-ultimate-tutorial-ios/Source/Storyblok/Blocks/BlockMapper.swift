@@ -46,9 +46,6 @@ final class BlockMapper {
                         articlesBlock?.resolveRelations(using: resolver)
                     }
                     return articlesBlock
-                case "section":
-                    // Decode a SectionBlock.
-                    return try? JSONDecoder().decode(SectionBlock.self, from: data)
                 default:
                     // Print a message for unhandled block types.
                     print("Unhandled block type: \(component)")
