@@ -7,7 +7,11 @@
 
 
 /// A model representing an article block with its key attributes.
-struct ArticleBlock {
+struct ArticleBlock: RelationResolvableBlock {
+    var _uid: String
+    
+    var component: String
+    
     /// The title of the article.
     let title: String
     

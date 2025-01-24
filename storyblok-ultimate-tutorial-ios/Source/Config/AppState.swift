@@ -12,6 +12,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 /// `AppState` is a singleton class responsible for managing global application state.
 /// It provides a centralized place to store and update app-wide settings, such as the selected language.
@@ -25,4 +26,6 @@ final class AppState: ObservableObject {
     /// The default language is set to `.english` to ensure that the app has a valid fallback.
     /// Changes to this property will automatically trigger UI updates for views observing it.
     @Published var language: Language = .english // Default language
+    
+    @Published var currentNavigationPath: NavigationPath?
 }

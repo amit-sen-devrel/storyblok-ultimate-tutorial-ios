@@ -7,7 +7,7 @@
 
 
 /// A model representing a Hero block, typically used for large banners or header sections.
-struct HeroBlock: Codable {
+struct HeroBlock: RelationResolvableBlock {
     /// A unique identifier for the hero block.
     let _uid: String
     

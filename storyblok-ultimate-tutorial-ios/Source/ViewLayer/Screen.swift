@@ -75,6 +75,16 @@ extension Screen {
             }
         }
         .navigationTitle(title ?? "") // Sets the navigation bar title if provided.
-        .navigationBarTitleDisplayMode(.large) // Uses a large title style for better visibility.
+        .navigationBarTitleDisplayMode(.inline) // Uses a large title style for better visibility.
+        .toolbar {
+            // Display the title in the toolbar
+            ToolbarItem(placement: .principal) {
+                VStack {
+                    Text(title ?? "")
+                        .font(.headline)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+        }
     }
 }

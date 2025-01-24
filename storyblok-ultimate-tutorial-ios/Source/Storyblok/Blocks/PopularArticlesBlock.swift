@@ -7,7 +7,7 @@
 
 
 /// A model representing a block that contains popular articles.
-struct PopularArticlesBlock: Codable {
+struct PopularArticlesBlock: RelationResolvableBlock {
     /// Unique identifier for the block.
     let _uid: String
     
@@ -23,17 +23,7 @@ struct PopularArticlesBlock: Codable {
     
     /// Identifies the block type, expected to be "popular-articles".
     let component: String
-}
-
-
-/// A model representing an article reference by its UUID.
-struct ArticleReference: Codable {
-    /// The UUID of the referenced article.
-    let uuid: String
-}
-
-
-extension PopularArticlesBlock {
+    
     /**
      Resolves UUID references in the `articles` array to their full content data.
      
@@ -57,4 +47,11 @@ extension PopularArticlesBlock {
             )
         }
     }
+}
+
+
+/// A model representing an article reference by its UUID.
+struct ArticleReference: Codable {
+    /// The UUID of the referenced article.
+    let uuid: String
 }

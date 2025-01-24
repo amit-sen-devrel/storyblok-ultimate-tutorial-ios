@@ -70,9 +70,11 @@ struct ArticlesScreen: Screen {
         }
         .navigationDestination(for: String.self) { fullSlug in
             // Define the destination for dynamic navigation
-            SingleArticleScreen(
-                fullSlug: fullSlug,
-                storyFetcher: viewModel.storyFetcher,
+            PageScreen(
+                viewModel: PageViewModel(
+                    storyFetcher: viewModel.storyFetcher,
+                    slug: "blogs/\(fullSlug)"
+                ),
                 navigationPath: navigationPath
             )
         }

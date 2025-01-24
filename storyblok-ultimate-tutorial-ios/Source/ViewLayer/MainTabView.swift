@@ -12,22 +12,7 @@ import SwiftUI
 struct MainTabView: View {
     // MARK: - Dependencies
     
-    /// The `StoryFetcher` instance used for fetching content across the app.
-    let storyFetcher: StoryFetcher
-    
-    // MARK: - State Properties
-    
-    /// Navigation path for the Home tab.
-    @State private var homeNavigationPath = NavigationPath()
-    
-    /// Navigation path for the Articles tab.
-    @State private var articlesNavigationPath = NavigationPath()
-    
-    /// Navigation path for the About tab.
-    @State private var aboutNavigationPath = NavigationPath()
-    
-    /// Navigation path for the Language Settings tab.
-    @State private var languageNavigationPath = NavigationPath()
+    @EnvironmentObject private var appInitializer: AppInitializer
     
     // MARK: - Body
     
@@ -35,13 +20,14 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             // Home Tab
-            NavigationStack(path: $homeNavigationPath) {
-                HomeScreen(
-                    viewModel: HomeViewModel(
-                        storyFetcher: storyFetcher,
-                        slug: TabScreen.home.slug
+            NavigationStack(path: $appInitializer.homeNavigationPath) {
+                PageScreen(
+                    viewModel: PageViewModel(
+                        storyFetcher: appInitializer.storyFetcher,
+                        slug: TabScreen.home.slug,
+                        title: TabScreen.home.title
                     ),
-                    navigationPath: $homeNavigationPath
+                    navigationPath: $appInitializer.homeNavigationPath
                 )
             }
             .tabItem {
@@ -49,10 +35,10 @@ struct MainTabView: View {
             }
             
             // Articles Tab
-            NavigationStack(path: $articlesNavigationPath) {
+            NavigationStack(path: $appInitializer.articlesNavigationPath) {
                 ArticlesScreen(
-                    viewModel: ArticlesViewModel(storyFetcher: storyFetcher),
-                    navigationPath: $articlesNavigationPath
+                    viewModel: ArticlesViewModel(storyFetcher: appInitializer.storyFetcher),
+                    navigationPath: $appInitializer.articlesNavigationPath
                 )
             }
             .tabItem {
@@ -60,13 +46,14 @@ struct MainTabView: View {
             }
             
             // About Tab
-            NavigationStack(path: $aboutNavigationPath) {
-                AboutScreen(
-                    viewModel: AboutViewModel(
-                        storyFetcher: storyFetcher,
-                        slug: TabScreen.about.slug
+            NavigationStack(path: $appInitializer.aboutNavigationPath) {
+                PageScreen(
+                    viewModel: PageViewModel(
+                        storyFetcher: appInitializer.storyFetcher,
+                        slug: TabScreen.about.slug,
+                        title: TabScreen.about.title
                     ),
-                    navigationPath: $aboutNavigationPath
+                    navigationPath: $appInitializer.aboutNavigationPath
                 )
             }
             .tabItem {
@@ -74,8 +61,8 @@ struct MainTabView: View {
             }
             
             // Language Settings Tab
-            NavigationStack(path: $languageNavigationPath) {
-                LanguageSettingsScreen(navigationPath: $languageNavigationPath)
+            NavigationStack(path: $appInitializer.languageNavigationPath) {
+                LanguageSettingsScreen(navigationPath: $appInitializer.languageNavigationPath)
             }
             .tabItem {
                 Label(TabScreen.language.title, systemImage: TabScreen.language.icon)

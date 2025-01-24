@@ -11,13 +11,13 @@ import SwiftUI
 struct storyblok_ultimate_tutorial_iosApp: App {
     var body: some Scene {
         WindowGroup {
-            // Initialize dependencies once
-            let networkManager = NetworkManager()
-            let storyFetcher = StoryFetcher(networkManager: networkManager)
-
+            // Perform app-wide initialization
+            let appInitializer = AppInitializer.shared
+            
             // Pass the dependencies to MainTabView
-            MainTabView(storyFetcher: storyFetcher)
-                .environmentObject(AppState.shared)
+            MainTabView()
+                            .environmentObject(appInitializer)
+                            .environmentObject(AppState.shared)
         }
     }
 }

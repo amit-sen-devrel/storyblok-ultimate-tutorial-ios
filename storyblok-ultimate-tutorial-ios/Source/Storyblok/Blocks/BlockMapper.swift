@@ -6,53 +6,50 @@
 //
 
 import Foundation
+import SwiftUI
 
-/// A utility class responsible for mapping content values to specific block types.
 final class BlockMapper {
-    
     /**
-     Maps a `ContentValue` to a specific block type (e.g., `HeroBlock`, `PopularArticlesBlock`).
+     Maps a `ContentValue` to its corresponding block view using `BlockRegistry`.
      
-     - Parameter contentValue: The `ContentValue` representing the block's data.
-     - Parameter resolver: An optional `StoryRelationResolver` for resolving UUID relations.
-     - Returns: A decoded block conforming to `Decodable` or `nil` if the mapping fails.
-     
-     ### Usage
-     ```swift
-     let block: Decodable? = BlockMapper.map(contentValue: someContentValue, resolver: someResolver)
-     if let heroBlock = block as? HeroBlock {
-         // Use the hero block
-     }
-     ```
+     - Parameters:
+     - contentValue: The content value representing the block.
+     - resolver: An optional `StoryRelationResolver` to resolve relations.
+     - Returns: An `AnyView` for the block or `nil` if mapping fails.
      */
-    static func map(contentValue: ContentValue, resolver: StoryRelationResolver?) -> Decodable? {
-        // Ensure the contentValue is a dictionary.
-        if case let .dictionary(value) = contentValue {
-            // Encode the dictionary to JSON data.
-            guard let data = try? JSONEncoder().encode(value) else {
-                return nil
-            }
-            
-            // Extract the "component" field to identify the block type.
-            if let component = value["component"]?.toString() {
-                switch component {
-                case "hero":
-                    // Decode a HeroBlock.
-                    return try? JSONDecoder().decode(HeroBlock.self, from: data)
-                case "popular-articles", "all-articles":
-                    // Decode a PopularArticlesBlock and resolve relations if a resolver is provided.
-                    var articlesBlock = try? JSONDecoder().decode(PopularArticlesBlock.self, from: data)
-                    if let resolver {
-                        articlesBlock?.resolveRelations(using: resolver)
-                    }
-                    return articlesBlock
-                default:
-                    // Print a message for unhandled block types.
-                    print("Unhandled block type: \(component)")
-                    return nil
-                }
-            }
+    static func map<T: RelationResolvableBlock>(
+        contentValue: ContentValue,
+        as type: T.Type,
+        resolver: StoryRelationResolver? = nil
+    ) -> AnyView? {
+        guard case let .dictionary(value) = contentValue,
+              let data = try? JSONEncoder().encode(value),
+              var block = try? JSONDecoder().decode(type, from: data) else {
+            return nil
         }
-        return nil
+        
+        // Resolve relations if the block conforms to RelationResolvableBlock
+        resolver.map { block.resolveRelations(using: $0) }
+        
+        // Use BlockRegistry to fetch the view directly
+        guard let view = BlockRegistry.shared.getBlockView(for: block.component, using: block) else {
+            print("No view registered for component: \(block.component)")
+            return nil
+        }
+        
+        return view
+    }
+    
+    static func mapSingleArticleBlock(storyResponse: StoryResponse) -> AnyView? {
+        let articleBlock = ArticleBlock(
+            _uid: storyResponse.story.content.fields["_uid"]?.toString() ?? "",
+            component: storyResponse.story.content.fields["component"]?.toString() ?? "",
+            title: storyResponse.story.content.fields["title"]?.toString() ?? "",
+            teaser: storyResponse.story.content.fields["teaser"]?.toString() ?? "",
+            image: storyResponse.story.content.fields["image"]?.toAsset(),
+            richContent: storyResponse.story.content.fields["content"]?.toRichText()
+        )
+        
+        return AnyView(ArticleBlockView(block: articleBlock))
     }
 }
